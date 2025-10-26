@@ -1,0 +1,86 @@
+replicaCount: 1
+image:
+  repository: localhost/simple2-python
+  pullPolicy: IfNotPresent
+  tag: "0.0.4"
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+serviceAccount:
+  create: true
+  automount: true
+  annotations: {}
+  name: ""
+
+podAnnotations: {}
+podLabels: {}
+
+podSecurityContext: {}
+
+securityContext: {}
+
+service:
+  type: ClusterIP
+  port: 5000
+  protocol: TCP
+  name: http
+
+ingress:
+  enabled: true
+  ingressClassName: nginx
+  hosts:
+  - host: "app.local"
+    paths:
+    - pathType: Prefix
+      path: /
+  tls: []
+
+httpRoute:
+  enabled: false
+  annotations: {}
+  parentRefs:
+  - name: gateway
+    sectionName: http
+  hostnames:
+  - local
+  rules:
+    - backendRefs:
+      - name: python-app
+        port: 80
+    - matches:
+      - path:
+          type: PathPrefix
+          value: /api/v1/healthz
+
+resources:
+  requests:
+    cpu: 20m
+    memory: 32Mi
+  limits:
+    cpu: 50m
+    memory: 64Mi
+
+livenessProbe:
+  httpGet:
+    path: /api/v1/healthz
+    port: http
+readinessProbe:
+  httpGet:
+    path: /api/v1/healthz
+    port: http
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 1
+  targetCPUUtilizationPercentage: 80
+
+volumes: []
+volumeMounts: []
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}

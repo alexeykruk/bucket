@@ -1,0 +1,17 @@
+name: Golang CI
+
+on:
+  push:
+    paths:
+      - 'golang-app/src/**'
+      - 'golang-app/Dockerfile'
+      - '.github/workflows/golang-ci.yml'
+    branches:
+      - master
+
+jobs:
+  build:
+    runs-on: arc-runner-set
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
