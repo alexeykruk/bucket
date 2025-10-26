@@ -10,7 +10,7 @@ on:
       - master
 
 jobs:
-  build:
+  simple:
     runs-on: arc-runner-set
     steps:
     - uses: actions/checkout@v5
@@ -18,4 +18,4 @@ jobs:
       with:
         go-version: '^1.25'
     - run: go version
-    - run: go run main.go
+    - run: go run golang-app/main.go
